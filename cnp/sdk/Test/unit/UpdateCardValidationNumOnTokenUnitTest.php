@@ -24,15 +24,8 @@
  */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class UpdateCardValidationNumOnTokenUnitTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple()
     {
         $hash_in = array('id' => 'id',
@@ -81,28 +74,6 @@ class UpdateCardValidationNumOnTokenUnitTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('PHPUnit_Framework_Error_Warning');
         $retOb = $cnpTest->updateCardValidationNumOnToken($hash_in);
     }
-
-    public function test_cardValidationNumIsRequiredWithCheckoutID()
-    {
-        $hash_in = array('id' => 'id',
-            'orderId'=>'1',
-            'cnpToken'=>'123456789101112',
-            'cardValidationNum'=>'123',
-            'checkoutId'=>'3245');
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-
-        $mock->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<orderId>1.*<cnpToken>123456789101112.*<cardValidationNum>123.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-
-        $retOb = $cnpTest->updateCardValidationNumOnToken($hash_in);
-
-        echo $retOb;
-    }
-
 
     public function test_loggedInUser()
     {

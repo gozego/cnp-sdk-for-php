@@ -26,18 +26,12 @@
 namespace cnp\sdk\Test\certification;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 USE cnp\sdk\XmlParser;
 
 define('PRELIVE_URL', 'https://payments.vantivprelive.com/vap/communicator/online');
 
 class CertAuthReversal extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_32()
     {
         $auth_hash = array('id' => '1211',
@@ -56,7 +50,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
                 'expDate' => '0112',
                 'cardValidationNum' => '349',
                 'type' => 'VI'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -69,7 +63,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $capture_hash = array(
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -78,7 +72,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $authReversal_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'amount' => '5005',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authReversalResponse = $initialize->authReversalRequest($authReversal_hash);
         $this->assertEquals('000', XmlParser::getNode($authReversalResponse, 'response'));
@@ -106,7 +100,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
                 'type' => 'MC'),
             //TODO 3-D Secure transaction not supported by merchant
             'cardholderAuthentication' => array('authenticationValue' => 'BwABBJQ1AgAAAAAgJDUCAAAAAAA='),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
@@ -120,7 +114,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $authReversal_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authReversalResponse = $initialize->authReversalRequest($authReversal_hash);
         $this->assertEquals('000', XmlParser::getNode($authReversalResponse, 'response'));
@@ -145,7 +139,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
                 'expDate' => '0312',
                 'cardValidationNum' => '758',
                 'type' => 'DI'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -158,7 +152,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $authReversal_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authReversalResponse = $initialize->authReversalRequest($authReversal_hash);
         $this->assertEquals('000', XmlParser::getNode($authReversalResponse, 'response'));
@@ -182,7 +176,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
                 'number' => '375001000000005',
                 'expDate' => '0412',
                 'type' => 'AX'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -194,7 +188,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $capture_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'amount' => '20020',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -203,7 +197,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $authReversal_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'amount' => '20020',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authReversalResponse = $initialize->authReversalRequest($authReversal_hash);
         $this->assertEquals('000', XmlParser::getNode($authReversalResponse, 'response'));
@@ -220,7 +214,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
                 'number' => '375000026600004',
                 'expDate' => '0512',
                 'type' => 'AX'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -230,7 +224,7 @@ class CertAuthReversal extends \PHPUnit_Framework_TestCase
         $authReversal_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'amount' => '10000',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authReversalResponse = $initialize->authReversalRequest($authReversal_hash);
         $this->assertEquals('000', XmlParser::getNode($authReversalResponse, 'response'));

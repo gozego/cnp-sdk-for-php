@@ -24,15 +24,8 @@
  */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class FastAccessFundingTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple()
     {
         $hash_in = array('id' => 'id',
@@ -54,36 +47,5 @@ class FastAccessFundingTest extends \PHPUnit_Framework_TestCase
         $cnpTest->newXML = $mock;
         $cnpTest->fastAccessFunding($hash_in);
     }
-    public function test_fastAccessFunding_with_cardholderAddress()
-    {
-        $hash_in = array('id' => 'id',
-            'fundingSubmerchantId' => '2111',
-            'submerchantName' => '001',
-            'fundsTransferId' => '1234567891111111',
-            'amount' => '13',
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'
-            ),
-            'cardholderAddress' => array(
-                'addressLine1' => '2 Main St.',
-                'addressLine2' => 'Apt. 222',
-                'addressLine3' => 'NA',
-                'city' => 'Riverside',
-                'state' => 'RI',
-                'zip' => '02915',
-                'country' => 'US')
-        );
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<addressLine1>2 Main St..*<addressLine2>Apt. 222.*<addressLine3>NA.*<city>Riverside.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->fastAccessFunding($hash_in);
-    }
-
 
 }

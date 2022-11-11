@@ -19,7 +19,7 @@ See LICENSE file for details on using this software.
 
 Source Code available from : https://github.com/Vantiv/cnp-sdk-for-php
 
-Please contact [Vantiv eCommerce](https://developer.vantiv.com/community/ecommerce) to receive valid merchant credentials in order to run tests successfully or if you require assistance in any way.  We are reachable at sdksupport@fisglobal.com
+Please contact [Vantiv eCommerce](https://developer.vantiv.com/community/ecommerce) to receive valid merchant credentials in order to run tests successfully or if you require assistance in any way.  We are reachable at sdksupport@Vantiv.com
 
 SDK PHP Dependencies
 --------------
@@ -34,23 +34,19 @@ If you are using a composer to manage your dependencies, you can do the followin
 1) Install the composer using command:
 > curl -sS https://getcomposer.org/installer | php
 
-2) Move into the cnp-sdk-for-php directory and install dependencies via composer (ensure the path to composer.phar is correct).
-> cd cnp-sdk-for-php 
-
-> php ../composer.phar install
+2) Install dependencies using the command:
+> php composer.phar install
 
 3) Configure the SDK:
 > cd cnp/sdk
-
 > php Setup.php
 
-4) Return to the cnp-sdk-for-php directory, then run the attached sample:
+4) Run the attached sample:
 ```php
 <?php
-require_once realpath(dirname(__FILE__)).'/vendor/autoload.php';
+require_once _DIR_.'/vendor/autoload.php';
 #sale
 $sale_info = array(
-             'id' => '42',
              'orderId' => '1',
              'amount'  => '10010',
              'orderSource' => 'ecommerce',
@@ -109,21 +105,25 @@ Clone Repo
 Running the above commands will create a configuration file in the lib directory. 
 
 
-3) Create a php file similar to: 
+3) Create a symlink to the SDK
+
+>ln -s /path/to/sdk /var/www/html/nameOfLink
+
+
+4.) Create a php file similar to: 
 
 ```php
 <?php
-require_once realpath(dirname(__FILE__)) . '/CnpOnline.php';  
+require_once realpath(dirname(__FILE__)) . '/../lib/CnpOnline.php';  
     // Visa $10.00 sale
     $hash_in = array(
-	      'id' => '42',
 	      'amount'=>'106',
 	      'orderId' => '123213',
 	      'orderSource'=>'ecommerce',
 	      'card'=>array(
 	      'type'=>'VI',
 	      'number' =>'4100000000000001',
-	      'expDate' =>'1000')
+	     'expDate' =>'1000')
 	      );
 //Perform the transaction on the Vantiv eCommerce Platform
 $initialize = new CnpOnlineRequest();
@@ -137,17 +137,16 @@ echo ("Vantiv eCommerce Transaction ID: " . XMLParser::getNode($saleResponse,'cn
 As of 8.13.1, you may also use a tree-oriented style to get the response values:
 ```php
 <?php
-require_once realpath(dirname(__FILE__)) . '/CnpOnline.php';  
+require_once realpath(dirname(__FILE__)) . '/../lib/CnpOnline.php';  
     // Visa $10.00 sale
     $hash_in = array(
-	      'id' => '42',
 	      'amount'=>'106',
 	      'orderId' => '123213',
 	      'orderSource'=>'ecommerce',
 	      'card'=>array(
 	      'type'=>'VI',
 	      'number' =>'4100000000000001',
-	      'expDate' =>'1000')
+	     'expDate' =>'1000')
 	      );
 //Perform the transaction on the Vantiv eCommerce Platform
 $initialize = new CnpOnlineRequest($treeResponse=true);
@@ -163,13 +162,13 @@ NOTE: you may have to change the path to match that of your filesystems.
 
 If you get an error like:
 ```bash
-PHP Fatal error:  require_once(): Failed opening required '/home/gdake/git/cnp-sdk-for-php/CnpOnline.php' (include_path='.:/usr/share/pear:/usr/share/php') in /home/gdake/git/cnp-sdk-for-php/foo.php on line 2
+PHP Fatal error:  require_once(): Failed opening required '/home/gdake/git/cnp-sdk-for-php/../lib/CnpOnline.php' (include_path='.:/usr/share/pear:/usr/share/php') in /home/gdake/git/cnp-sdk-for-php/foo.php on line 2
 ```
 You need to change the second line of your script to load the real location of CnpOnline.php
 
 If you get an error like:
 ```bash
-PHP Fatal error:  require(): Failed opening required '/home/gdake/cnp-sdk-for-php/vendor/autoload.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/gdake/cnp-sdk-for-php/cnp/sdk/CnpOnline.php on line 42
+PHP Fatal error:  require(): Failed opening required '/home/gdake/cnp-sdk-for-php/lib/../vendor/autoload.php' (include_path='.:/usr/share/php:/usr/share/pear') in /home/gdake/cnp-sdk-for-php/lib/CnpOnline.php on line 42
 ```
 You probably had a problem with composer.  You can safely remove line 42 if you are not using batch processing, or you can edit it to point at our dependencies that you've downloaded in another way.
 
@@ -178,6 +177,6 @@ You probably had a problem with composer.  You can safely remove line 42 if you 
     Message: Valid Format
     Vantiv eCommerce Transaction ID: <your-numeric-txn-id>
 
-More examples can be found here [php Gists](https://gist.github.com/litleSDK)
+More examples can be found here [php Gists])(https://gist.github.com/litleSDK)
 
-Please contact Vantiv eCommerce Inc. with any further questions.   You can reach us at sdksupport@fisglobal.com
+Please contact Vantiv eCommerce Inc. with any further questions.   You can reach us at SDKSupport@Vantiv.com

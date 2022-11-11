@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class QueryTransactionFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function testSimpleQueryTransaction()
     {
         $hash_in = array(
@@ -48,8 +42,6 @@ class QueryTransactionFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('150', $response->nodeValue);
         $matchCount = XmlParser::getNode($queryTransactionResponse, 'matchCount');
         $this->assertEquals('1', $matchCount);
-        $location = XmlParser::getNode($queryTransactionResponse, 'location');
-        $this->assertEquals('sandbox', $location);
         $resultsMax10 = XmlParser::getNodeWithChildren($queryTransactionResponse, 'results_max10');
         foreach ($resultsMax10->getElementsByTagName('authorizationResponse') as $child) {
             $childResponse = XmlParser::getNode($child, 'response');
@@ -78,8 +70,6 @@ class QueryTransactionFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('150', $response->nodeValue);
         $matchCount = XmlParser::getNode($queryTransactionResponse, 'matchCount');
         $this->assertEquals('1', $matchCount);
-        $location = XmlParser::getNode($queryTransactionResponse, 'location');
-        $this->assertEquals('sandbox', $location);
         $resultsMax10 = XmlParser::getNodeWithChildren($queryTransactionResponse, 'results_max10');
         foreach ($resultsMax10->getElementsByTagName('authorizationResponse') as $child) {
             $childResponse = XmlParser::getNode($child, 'response');
@@ -119,8 +109,6 @@ class QueryTransactionFunctionalTest extends \PHPUnit_Framework_TestCase
         $matchCount = XmlParser::getNode($queryTransactionResponse, 'matchCount');
         $this->assertEquals('150', $response->nodeValue);
         $this->assertEquals('2', $matchCount);
-        $location = XmlParser::getNode($queryTransactionResponse, 'location');
-        $this->assertEquals('sandbox', $location);
         $resultsMax10 = XmlParser::getNodeWithChildren($queryTransactionResponse, 'results_max10');
         foreach ($resultsMax10->getElementsByTagName('authorizationResponse') as $child) {
             $childResponse = XmlParser::getNode($child, 'response');
@@ -147,19 +135,5 @@ class QueryTransactionFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Original transaction not found', $message);
     }
 
-    public function testSimpleQueryTransactionWithNewActionTypeValue()
-    {
-        $hash_in = array(
-            'id' => 'id',
-            'origId' => 'ABCD0',
-            'origActionType' => 'FIRD');
-
-        $initialize = new CnpOnlineRequest();
-        $queryTransactionResponse = $initialize->queryTransaction($hash_in);
-        $response = XmlParser::getNode($queryTransactionResponse, 'response');
-        $message = XmlParser::getNode($queryTransactionResponse, 'message');
-        $this->assertEquals('151', $response);
-        $this->assertEquals('Original transaction not found', $message);
-    }
 
 }

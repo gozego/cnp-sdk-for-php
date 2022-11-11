@@ -32,11 +32,11 @@ class CnpRequest
             mkdir($request_dir);
         }
 
-        if (mb_substr($request_dir, -1, 1) != DIRECTORY_SEPARATOR) {
+        if (substr($request_dir, -1, 1) != DIRECTORY_SEPARATOR) {
             $request_dir = $request_dir . DIRECTORY_SEPARATOR;
         }
 
-        $ts = str_replace(" ", "", mb_substr(microtime(), 2));
+        $ts = str_replace(" ", "", substr(microtime(), 2));
         $batches_filename = $request_dir . "request_" . $ts . "_batches";
         $request_filename = $request_dir . "request_" . $ts;
         $response_filename = $request_dir . "response_" . $ts;
@@ -205,9 +205,8 @@ class CnpRequest
     /*
      * Given a timeout (defaults to 7200 seconds - two hours), periodically poll the SFTP directory, looking for the response file for this request.
      */
-    public function retrieveFromCnpSFTP($session)
+    public function retrieveFromCnpSFTP($session, $sftp_timeout=7200)
     {
-        $sftp_timeout = (float) $this->config['sftp_timeout'];
         $time_spent = 0;
         $this->resetSFTPSession($session);
         while ($time_spent < $sftp_timeout) {
@@ -233,7 +232,7 @@ class CnpRequest
             sleep(20);
         }
 
-        throw new \Exception("Response file can not be retrieved because of timeout (Duration : " . $sftp_timeout . " seconds)");
+        throw new \Exception("Response file can not be retrieved because of timeout (Duration : 2 hours)");
 
     }
 
@@ -296,6 +295,51 @@ class CnpRequest
                     throw new \Exception($message);
                 }
             }
+        }
+    }
+
+    /*
+     * Deliver the Cnp Request over a TCP stream. Returns the name of the file retrieved from the server
+     */
+    public function sendToCnpStream()
+    {
+        if (!$this->closed) {
+            $this->closeRequest();
+        }
+
+        $tcp_url = $this->config['batch_url'];
+        $tcp_port = (float) $this->config['tcp_port'];
+        $tcp_ssl = (int) $this->config['tcp_ssl'];
+        $tcp_timeout = (float)$this->config['tcp_timeout'];;
+
+        if ($tcp_ssl) {
+            $tcp_url = 'ssl://' . $tcp_url;
+        }
+
+        $sock = fsockopen($tcp_url, $tcp_port, $err_no, $err_str, $tcp_timeout);
+
+        if (!$sock) {
+            throw new \RuntimeException("Error when opening socket at $tcp_url : $tcp_port. Error number: $err_no Error message: $err_str");
+        } else {
+            $handle = @fopen($this->request_file,"r");
+            if ($handle) {
+                while (($buffer = fgets($handle, 4096)) !== false) {
+                    fwrite($sock, $buffer);
+                }
+                if (!feof($handle)) {
+                    throw new \RuntimeException("Error when reading request file at $this->request_file. Please check your privilege.");
+                }
+                fclose($handle);
+            } else {
+                throw new \RuntimeException("Could not open request file at $this->request_file. Please check your privilege.");
+            }
+            # read from the response socket while there's data
+            while (!feof($sock)) {
+                file_put_contents($this->response_file, fgets($sock, 128), FILE_APPEND);
+            }
+            fclose($sock);
+
+            return $this->response_file;
         }
     }
 }

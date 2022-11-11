@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
 
     public function test_echeckSale_with_echeck()
     {
@@ -50,8 +44,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_echeckSale_with_echeckToken()
@@ -68,8 +60,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_echeckSale_missing_amount()
@@ -102,8 +92,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_echeckSale_secondaryAmount()
@@ -120,8 +108,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_echeckSale_secondaryAmount_With_CCD()
@@ -138,8 +124,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_echeckSale_secondaryAmount_With_CCD_longerthan80()
@@ -176,8 +160,6 @@ class EcheckSaleFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckSaleResponse = $initialize->echeckSaleRequest($hash_in);
         $response = XmlParser::getNode($echeckSaleResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckSaleResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

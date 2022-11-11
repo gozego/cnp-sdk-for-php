@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_echeckCredit()
     {
         $hash_in = array('id' => 'id',
@@ -45,8 +39,6 @@ class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckCreditResponse = $initialize->echeckCreditRequest($hash_in);
         $response = XmlParser::getNode($echeckCreditResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckCreditResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_no_amount()
@@ -72,8 +64,6 @@ class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckCreditResponse = $initialize->echeckCreditRequest($hash_in);
         $response = XmlParser::getNode($echeckCreditResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckCreditResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_echeckCredit_with_echeckToken()
@@ -90,8 +80,6 @@ class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckCreditResponse = $initialize->echeckCreditRequest($hash_in);
         $response = XmlParser::getNode($echeckCreditResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckCreditResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_echeckCredit_missing_billing()
@@ -123,8 +111,6 @@ class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckCreditResponse = $initialize->echeckCreditRequest($hash_in);
         $response = XmlParser::getNode($echeckCreditResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckCreditResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_echeckCredit_With_SecondaryAmount()
@@ -138,8 +124,6 @@ class EcheckCreditFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckCreditResponse = $initialize->echeckCreditRequest($hash_in);
         $response = XmlParser::getNode($echeckCreditResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckCreditResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 

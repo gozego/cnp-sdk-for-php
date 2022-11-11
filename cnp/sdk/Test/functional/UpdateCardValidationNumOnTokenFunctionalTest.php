@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class UpdateCardValidationNumOnTokenFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple()
     {
         $hash_in = array('id' => '1211',
@@ -48,10 +42,6 @@ class UpdateCardValidationNumOnTokenFunctionalTest extends \PHPUnit_Framework_Te
         $initialize = new CnpOnlineRequest();
         $updateCardValidationNumOnTokenResponse = $initialize->updateCardValidationNumOnToken($hash_in);
         $message = XmlParser::getAttribute($updateCardValidationNumOnTokenResponse, 'cnpOnlineResponse', 'message');
-        $location = XmlParser::getNode($updateCardValidationNumOnTokenResponse, 'location');
-        $this->assertEquals('sandbox', $location);
         $this->assertEquals('Valid Format', $message);
     }
-
-
 }

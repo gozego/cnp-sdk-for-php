@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class EcheckVoidFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_echeckVoid()
     {
         $hash_in = array('cnpTxnId' => '123456789012345678', 'id' => 'id');
@@ -42,8 +36,6 @@ class EcheckVoidFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckVoidResponse = $initialize->echeckVoidRequest($hash_in);
         $response = XmlParser::getAttribute($echeckVoidResponse, 'cnpOnlineResponse', 'response');
         $this->assertEquals('0', $response);
-        $location = XmlParser::getNode($echeckVoidResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

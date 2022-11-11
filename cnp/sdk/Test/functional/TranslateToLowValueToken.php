@@ -25,21 +25,12 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 require_once realpath(__DIR__) . '/../../../../vendor/autoload.php';
 
 class TranslateToLowValueToken extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
-    /**
-     * @throws \cnp\sdk\exceptions\cnpSDKException
-     */
     public function test_simple()
     {
         $hash_in = array('id' => 'id',
@@ -52,7 +43,5 @@ class TranslateToLowValueToken extends \PHPUnit_Framework_TestCase
         $response = $initialize->translateToLowValueTokenRequest($hash_in);
         $message = XmlParser::getAttribute($response, 'cnpOnlineResponse', 'message');
         $this->assertEquals('Valid Format', $message);
-        $location = XmlParser::getNode($response, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 }

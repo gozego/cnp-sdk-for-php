@@ -24,15 +24,8 @@
 */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class CreditUnitTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_credit()
     {
         $hash_in = array('cnpTxnId'=> '12312312','reportGroup'=>'Planets', 'amount'=>'123','id' => 'id',);
@@ -40,32 +33,6 @@ class CreditUnitTest extends \PHPUnit_Framework_TestCase
         $mock->expects($this->once())
         ->method('request')
         ->with($this->matchesRegularExpression('/.*<cnpTxnId>12312312.*<amount>123.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->creditRequest($hash_in);
-    }
-
-    public function test_credit_with_merchantCategoryCode()
-    {
-
-        $hash_in = array(
-            'reportGroup'=>'Planets',
-            'orderId'=>'12344',
-            'id' => 'id',
-            'amount'=>'106',
-            'orderSource'=>'ecommerce',
-            'merchantCategoryCode' => '3535',
-            'card'=>array(
-                'type'=>'VI',
-                'number' =>'4100000000000001',
-                'expDate' =>'1210'
-            ));
-
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<orderId>12344.*<amount>106.*/'));
 
         $cnpTest = new CnpOnlineRequest();
         $cnpTest->newXML = $mock;
@@ -386,122 +353,6 @@ class CreditUnitTest extends \PHPUnit_Framework_TestCase
     	$cnpTest = new CnpOnlineRequest();
     	$cnpTest->newXML = $mock;
     	$cnpTest->creditRequest($hash_in);
-    }
-
-    public function test_business_indicator()
-    {
-        $hash_in = array(
-            'amount'=>'2',
-            'id' => 'id',
-            'cnpTxnId'=>'3',
-            'payPalNotes'=>'notes',
-            'businessIndicator'=>'consumerBillPayment',
-        );
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock
-            ->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<businessIndicator>consumerBillPayment<\/businessIndicator>.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->creditRequest($hash_in);
-    }
-    public function test_simple_credit_with_optional_order_id()
-    {
-        $hash_in = array('id' => 'id',
-            'cnpTxnId' => '1234567891234567891',
-            'orderId' => '22@33123456789012345678901234567890',
-            'amount' => '123');
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<cnpTxnId>1234567891234567891.*<orderId>22@33123456789012345678901234567890.*<amount>123.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->creditRequest($hash_in);
-    }
-
-    public function test_credit_with_passengerTransportData()
-    {
-        $hash_in = array(
-            'id' => 'id',
-            'cnpTxnId' => '64736458734657',
-            'amount' => '1010',
-            'passengerTransportData' => array(
-                'passengerName' => 'Mrs. Huxley234567890123456789',
-                'ticketNumber' => 'ATL456789012345',
-                'issuingCarrier' => 'AMTK',
-                'carrierName' => 'AMTK',
-                'restrictedTicketIndicator' => 'refundable123456789',
-                'numberOfAdults' => '2',
-                'numberOfChildren' => '0',
-                'customerCode' => 'Railway',
-                'arrivalDate' => '2022-09-20',
-                'issueDate' => '2022-09-10',
-                'travelAgencyCode' => '12345678',
-                'travelAgencyName' => 'Travel R Us23456789012345',
-                'creditReasonIndicator' => 'A',
-                'ticketChangeIndicator' => 'C',
-                'ticketIssuerAddress' => '99 Second St',
-                'exchangeTicketNumber' => '123456789012346',
-                'exchangeAmount' => '500046',
-                'exchangeFeeAmount' => '5046',
-                'tripLegData0' => array(
-                    'tripLegNumber' => '1',
-                    'departureCode' => 'STL',
-                    'carrierCode' => 'AT',
-                    'serviceClass' => 'Business',
-                    'stopOverCode' => 'X',
-                    'destinationCode' => 'STL',
-                    'fareBasisCode' => 'nonref',
-                    'departureDate' => '2022-09-20',
-                    'originCity' => 'BOS',
-                    'travelNumber' => '123AB',
-                    'departureTime' => '09:32',
-                    'arrivalTime' => '15:56',
-                    'remarks' => 'This is a max 80 chars',
-                )
-            )
-
-        );
-
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock	->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<passengerName>Mrs. Huxley234567890123456789.*<ticketNumber>ATL456789012345.*<exchangeAmount>500046.*<serviceClass>Business.*<originCity>BOS.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->creditRequest($hash_in);
-    }
-
-    public function test_credit_with_additionalCOFData()
-    {
-        $hash_in = array('id' => 'id',
-            'amount' => '123',
-            'payPalNotes' => 'Notes',
-            'cnpTxnId' => '12345678000',
-            'additionalCOFData' => array(
-                'totalPaymentCount' => 'ND',
-                'paymentType' => 'Fixed Amount',
-                'uniqueId' => '234GTYH654RF13',
-                'frequencyOfMIT' => 'Annually',
-                'validationReference' => 'ANBH789UHY564RFC@EDB',
-                'sequenceIndicator' => '86',
-            ),
-        );
-
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock
-            ->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<amount>123.*<sequenceIndicator>86.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->creditRequest($hash_in);;
     }
 
 }

@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class RefundReversalFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple()
     {
         $hash_in = array(
@@ -58,8 +52,6 @@ class RefundReversalFunctionalTest extends \PHPUnit_Framework_TestCase
         $refundReversalResponse = $initialize->refundReversalRequest($hash_in);
         $response = XmlParser::getAttribute($refundReversalResponse, 'cnpOnlineResponse', 'response');
         $this->assertEquals('0', $response);
-        $location = XmlParser::getNode($refundReversalResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

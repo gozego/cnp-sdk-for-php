@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class GiftCardAuthReversalFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_giftCardAuthReversal()
     {
         $hash_in = array(
@@ -61,8 +55,6 @@ class GiftCardAuthReversalFunctionalTest extends \PHPUnit_Framework_TestCase
         $sequenceNumber = XmlParser::getNode($giftCardAuthReversalResponse, 'sequenceNumber');
         $this->assertEquals('0', $response);
         $this->assertEquals('123456', $sequenceNumber);
-        $location = XmlParser::getNode($giftCardAuthReversalResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

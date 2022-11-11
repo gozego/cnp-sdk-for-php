@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class EcheckVerificationFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_echeckVerification_with_echeck()
     {
         $hash_in = array('id' => 'id',
@@ -49,8 +43,6 @@ class EcheckVerificationFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckVerifcationResponse = $initialize->echeckVerificationRequest($hash_in);
         $response = XmlParser::getNode($echeckVerifcationResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckVerifcationResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_echeckVerification_with_echeckToken()
@@ -67,8 +59,6 @@ class EcheckVerificationFunctionalTest extends \PHPUnit_Framework_TestCase
         $echeckVerifcationResponse = $initialize->echeckVerificationRequest($hash_in);
         $response = XmlParser::getNode($echeckVerifcationResponse, 'response');
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($echeckVerifcationResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

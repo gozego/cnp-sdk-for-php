@@ -25,12 +25,7 @@
 namespace cnp\sdk;
  class UnloadReversalUnitTest extends \PHPUnit_Framework_TestCase
 {
-     public static function setUpBeforeClass()
-     {
-         CommManager::reset();
-     }
-
-     public function test_simple()
+ public function test_simple()
     {
         $hash_in = array (
 				'cnpTxnId' => '1234567890',

@@ -24,16 +24,8 @@
 */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-use cnp\sdk\XmlParser;
-
 class CaptureGivenAuthUnitTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_captureGivenAuth()
     {
         $hash_in = array(
@@ -52,32 +44,6 @@ class CaptureGivenAuthUnitTest extends \PHPUnit_Framework_TestCase
         $mock	->expects($this->once())
         ->method('request')
         ->with($this->matchesRegularExpression('/.*<authInformation><authDate>2002-10-09.*<authCode>543216.*><authAmount>12345.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->captureGivenAuthRequest($hash_in);
-
-    }
-
-    public function test_simple_captureGivenAuth_with_merchantCategoryCode()
-    {
-        $hash_in = array(
-            'amount'=>'123',
-            'orderId'=>'12344',
-            'id'=> 'id',
-            'merchantCategoryCode' => '3535',
-            'authInformation' => array(
-                'authDate'=>'2002-10-09','authCode'=>'543216',
-                'authAmount'=>'12345'),
-            'orderSource'=>'ecommerce',
-            'card'=>array(
-                'type'=>'VI',
-                'number' =>'4100000000000001',
-                'expDate' =>'1210'));
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock	->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<authInformation><authDate>2002-10-09.*<authCode>543216.*><authAmount>12345.*/'));
 
         $cnpTest = new CnpOnlineRequest();
         $cnpTest->newXML = $mock;
@@ -384,130 +350,7 @@ class CaptureGivenAuthUnitTest extends \PHPUnit_Framework_TestCase
     	$cnpTest->captureGivenAuthRequest($hash_in);
     
     }
-    public function test_captureGivenAuth_with_additionalCOFData()
-    {
-
-        $hash_in = array('id' => 'id',
-            'orderId' => '12344',
-            'amount' => '106',
-            'authInformation' => array(
-                'authDate' => '2002-10-09', 'authCode' => '543216',
-                'authAmount' => '12345'),
-            'billToAddress' => array('name' => 'Bob', 'city' => 'lowell', 'state' => 'MA', 'email' => 'vantiv.com'),
-            'processingInstructions' => array('bypassVelocityCheck' => 'true'),
-            'orderSource' => 'ecommerce',
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'),
-            'crypto' => 'true',
-            'billToAddress' => array(
-                'name' => 'David Berman A',
-                'addressLine1' => '10 Main Street',
-                'city' => 'San Jose',
-                'state' => 'ca',
-                'zip' => '95032',
-                'country' => 'USA',
-                'email' => 'dberman@phoenixProcessing.com',
-                'phone' => '781-270-1111',
-                'sellerId' => '21234234A1',
-                'url' => 'www.google.com',
-            ),
-            'shipToAddress' => array(
-                'name' => 'Raymond J. Johnson Jr. B',
-                'addressLine1' => '123 Main Street',
-                'city' => 'McLean',
-                'state' => 'VA',
-                'zip' => '22102',
-                'country' => 'USA',
-                'email' => 'ray@rayjay.com',
-                'phone' => '978-275-0000',
-                'sellerId' => '21234234A2',
-                'url' => 'www.google.com',
-            ),
-            'retailerAddress' => array(
-                'name' => 'John doe',
-                'addressLine1' => '123 Main Street',
-                'addressLine2' => '123 Main Street',
-                'addressLine3' => '123 Main Street',
-                'city' => 'Cincinnati',
-                'state' => 'OH',
-                'zip' => '45209',
-                'country' => 'USA',
-                'email' => 'noone@abc.com',
-                'phone' => '1234562783',
-                'sellerId' => '21234234A',
-                'companyName' => 'Google INC',
-                'url' => 'www.google.com',
-            ),
-            'additionalCOFData' => array(
-                'totalPaymentCount' => 'ND',
-                'paymentType' => 'Fixed Amount',
-                'uniqueId' => '234GTYH654RF13',
-                'frequencyOfMIT' => 'Annually',
-                'validationReference' => 'ANBH789UHY564RFC@EDB',
-                'sequenceIndicator' => '86',
-            ),
-        );
-
-        $initialize = new CnpOnlineRequest();
-        //print_r($hash_in);
-        $authorizationResponse = $initialize->captureGivenAuthRequest($hash_in);
-        $response = XmlParser::getNode($authorizationResponse, 'response');
-        $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($authorizationResponse, 'location');
-        $this->assertEquals('sandbox', $location);
-    }
-
-    public function test_capture_given_auth_with_passengerTransportData()
-    {
-        $hash_in = array('id' => 'id',
-            'orderId' => '12344',
-            'amount' => '106',
-            'businessIndicator' => 'consumerBillPayment',
-            'authInformation' => array(
-                'authDate' => '2002-10-09', 'authCode' => '543216',
-                'authAmount' => '12345'),
-            'orderSource' => 'ecommerce',
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'),
-            'passengerTransportData' =>array(
-                'passengerName' =>'Mrs. Huxley234567890123456789',
-                'ticketNumber' =>'ATL456789012345' ,
-                'issuingCarrier' =>'AMTK',
-                'carrierName' =>'AMTK',
-                'restrictedTicketIndicator' =>'99999',
-                'numberOfAdults' =>'2',
-                'numberOfChildren' =>'0',
-                'customerCode' =>'Railway',
-                'arrivalDate' =>'2022-09-20',
-                'issueDate' =>'2022-09-10',
-                'travelAgencyCode' =>'12345678',
-                'travelAgencyName' =>'Travel R Us23456789012345',
-                'computerizedReservationSystem' =>'STRT',
-                'creditReasonIndicator' =>'P',
-                'ticketChangeIndicator' =>'C',
-                'ticketIssuerAddress' =>'99 Second St',
-                'exchangeTicketNumber' =>'123456789012346',
-                'exchangeAmount' =>'500046',
-                'exchangeFeeAmount' =>'5046',
-                'tripLegData' =>array(
-                    'tripLegNumber' =>'10' ,
-                    'serviceClass' =>'First',
-                    'departureDate' =>'2022-09-20',
-                    'originCity' =>'BOS')
-            ));
-
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock	->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<passengerName>Mrs. Huxley234567890123456789.*<ticketNumber>ATL456789012345.*<exchangeAmount>500046.*<serviceClass>First.*<originCity>BOS.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->captureGivenAuthRequest($hash_in);
-    }
-
+ 
+ 
+   
 }

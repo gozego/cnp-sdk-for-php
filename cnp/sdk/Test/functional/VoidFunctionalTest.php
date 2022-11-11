@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class VoidFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_void()
     {
         $hash_in = array('cnpTxnId' => '123456789012345678', 'id' => '1211',);
@@ -42,8 +36,6 @@ class VoidFunctionalTest extends \PHPUnit_Framework_TestCase
         $voidResponse = $initialize->voidRequest($hash_in);
         $response = XmlParser::getAttribute($voidResponse, 'cnpOnlineResponse', 'response');
         $this->assertEquals('0', $response);
-        $location = XmlParser::getNode($voidResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 }

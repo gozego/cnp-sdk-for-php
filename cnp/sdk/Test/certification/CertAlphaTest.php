@@ -26,31 +26,23 @@
 namespace cnp\sdk\Test\certification;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 require_once realpath(__DIR__) . '/../../../../vendor/autoload.php';
 
 define('PRELIVE_URL', 'https://payments.vantivprelive.com/vap/communicator/online');
 
-//comment to see if can commit
-
 class CertAlphaTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     function test_1_Auth()
     {
         $auth_hash = array('id' => '1211',
             #'user'=> '12312',
             'orderId' => '1',
-            'amount' => '10100',
+            'amount' => '10010',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
-                'name' => 'John & Mary Smith',
+                'name' => 'John Smith',
                 'addressLine1' => '1 Main St.',
                 'city' => 'Burlington',
                 'state' => 'MA',
@@ -58,11 +50,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '4457010000000009',
-                'expDate' => '0121',
+                'expDate' => '0112',
                 'cardValidationNum' => '349',
                 'type' => 'VI'),
-        'url' => PRELIVE_URL, 'proxy'=>'');
-
+        'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -75,7 +66,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $capture_hash = array(
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -85,7 +76,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array(
             'cnpTxnId' => (XmlParser::getNode($captureResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -95,7 +86,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array(
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -109,7 +100,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
             'amount' => '0',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
-                'name' => 'John & Mary Smith',
+                'name' => 'John Smith',
                 'addressLine1' => '1 Main St.',
                 'city' => 'Burlington',
                 'state' => 'MA',
@@ -117,10 +108,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '4457010000000009',
-                'expDate' => '0121',
+                'expDate' => '0112',
                 'cardValidationNum' => '349',
                 'type' => 'VI'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -134,10 +125,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
     {
         $sale_hash = array('id' => '1211',
             'orderId' => '1',
-            'amount' => '10100',
+            'amount' => '10010',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
-                'name' => 'John & Mary Smith',
+                'name' => 'John Smith',
                 'addressLine1' => '1 Main St.',
                 'city' => 'Burlington',
                 'state' => 'MA',
@@ -145,10 +136,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '4457010000000009',
-                'expDate' => '0121',
+                'expDate' => '0112',
                 'cardValidationNum' => '349',
                 'type' => 'VI'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $saleResponse = $initialize->saleRequest($sale_hash);
         $this->assertEquals('000', XmlParser::getNode($saleResponse, 'response'));
@@ -160,7 +151,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array(
             'cnpTxnId' => (XmlParser::getNode($saleResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -169,7 +160,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array(
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -180,7 +171,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
     {
         $auth_hash = array('id' => '1211',
             'orderId' => '2',
-            'amount' => '20200',
+            'amount' => '20020',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
                 'name' => 'Mike J. Hammer',
@@ -192,10 +183,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '5112010000000003',
-                'expDate' => '0221',
+                'expDate' => '0212',
                 'cardValidationNum' => '261',
                 'type' => 'MC'),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
             //TODO 3-D Secure transaction not supported by merchant
             //'cardholderAuthentication' => array('authenticationValue'=>'BwABBJQ1AgAAAAAgJDUCAAAAAAA=' )
         );
@@ -212,7 +203,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $capture_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -222,7 +213,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($captureResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -232,7 +223,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -255,10 +246,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '5112010000000003',
-                'expDate' => '0221',
+                'expDate' => '0212',
                 'cardValidationNum' => '261',
                 'type' => 'MC'),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
             //TODO run against prelive for certification
             //'cardholderAuthentication' => array('authenticationValue'=>'BwABBJQ1AgAAAAAgJDUCAAAAAAA=' )
         );
@@ -276,7 +267,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
     {
         $sale_hash = array('id' => '1211',
             'orderId' => '2',
-            'amount' => '20200',
+            'amount' => '20020',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
                 'name' => 'Mike J. Hammer',
@@ -288,11 +279,11 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '5112010000000003',
-                'expDate' => '0221',
+                'expDate' => '0212',
                 'cardValidationNum' => '261',
                 'type' => 'MC'),
             'cardholderAuthentication' => array('authenticationValue' => 'BwABBJQ1AgAAAAAgJDUCAAAAAAA='),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $saleResponse = $initialize->saleRequest($sale_hash);
@@ -307,7 +298,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($saleResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -317,7 +308,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -328,7 +319,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
     {
         $auth_hash = array(
             'orderId' => '3', 'id' => '1211',
-            'amount' => '30300',
+            'amount' => '30030',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
                 'name' => 'Eileen Jones',
@@ -339,10 +330,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '6011010000000003',
-                'expDate' => '0321',
+                'expDate' => '0312',
                 'type' => 'DI',
                 'cardValidationNum' => '758'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
@@ -356,7 +347,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $capture_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets', 'id' => '1211',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -366,7 +357,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($captureResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -376,7 +367,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -398,10 +389,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '6011010000000003',
-                'expDate' => '0321',
+                'expDate' => '0312',
                 'type' => 'DI',
                 'cardValidationNum' => '758'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
         $this->assertEquals('000', XmlParser::getNode($authorizationResponse, 'response'));
@@ -415,7 +406,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
     {
         $sale_hash = array('id' => '1211',
             'orderId' => '3',
-            'amount' => '30300',
+            'amount' => '30030',
             'orderSource' => 'ecommerce',
             'billToAddress' => array(
                 'name' => 'Eileen Jones',
@@ -426,10 +417,10 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '6011010000000003',
-                'expDate' => '0321',
+                'expDate' => '0312',
                 'type' => 'DI',
                 'cardValidationNum' => '758'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $saleResponse = $initialize->saleRequest($sale_hash);
@@ -443,7 +434,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($saleResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -453,7 +444,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -475,9 +466,9 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '375001000000005',
-                'expDate' => '0421',
+                'expDate' => '0412',
                 'type' => 'AX'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
@@ -491,7 +482,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $capture_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000',XmlParser::getNode($captureResponse,'response'));
@@ -501,7 +492,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($captureResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -511,7 +502,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -533,9 +524,9 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '375001000000005',
-                'expDate' => '0421',
+                'expDate' => '0412',
                 'type' => 'AX'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $authorizationResponse = $initialize->authorizationRequest($auth_hash);
@@ -561,9 +552,9 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
                 'country' => 'US'),
             'card' => array(
                 'number' => '375001000000005',
-                'expDate' => '0421',
+                'expDate' => '0412',
                 'type' => 'AX'),
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
 
         $initialize = new CnpOnlineRequest();
         $saleResponse = $initialize->saleRequest($sale_hash);
@@ -578,7 +569,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($saleResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -588,7 +579,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -603,11 +594,11 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
             'orderSource' => 'ecommerce',
             'card' => array(
                 'number' => '4457010200000007',
-                'expDate' => '0521',
+                'expDate' => '0512',
                 'cardValidationNum' => '463',
                 'type' => 'VI'),
             'cardholderAuthentication' => array('authenticationValue'=> 'BwABBJQ1AgAAAAAgJDUCAAAAAAA='),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -622,7 +613,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $capture_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($authorizationResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $captureResponse = $initialize->captureRequest($capture_hash);
         $this->assertEquals('000', XmlParser::getNode($captureResponse, 'response'));
@@ -632,7 +623,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($captureResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -642,7 +633,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -657,11 +648,11 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
             'orderSource' => 'ecommerce',
             'card' => array(
                 'number' => '4457010200000007',
-                'expDate' => '0521',
+                'expDate' => '0512',
                 'cardValidationNum' => '463',
                 'type' => 'VI'),
             'cardholderAuthentication' => array('authenticationValue'=> 'BwABBJQ1AgAAAAAgJDUCAAAAAAA='),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -681,11 +672,11 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
             'orderSource' => 'ecommerce',
             'card' => array(
                 'number' => '4457010200000007',
-                'expDate' => '0521',
+                'expDate' => '0512',
                 'cardValidationNum' => '463',
                 'type' => 'VI'),
             'cardholderAuthentication' => array('authenticationValue'=> 'BwABBJQ1AgAAAAAgJDUCAAAAAAA='),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -700,7 +691,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $credit_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($saleResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $creditResponse = $initialize->creditRequest($credit_hash);
         $this->assertEquals('000', XmlParser::getNode($creditResponse, 'response'));
@@ -710,7 +701,7 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
         $void_hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $voidResponse = $initialize->voidRequest($void_hash);
         $this->assertEquals('000', XmlParser::getNode($voidResponse, 'response'));
@@ -719,125 +710,125 @@ class CertAlphaTest extends \PHPUnit_Framework_TestCase
 
     //TODO: incorrect responses for p1 sale
 
-//    function test_p1_idealSale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'p1_idealSale',
-//            'amount' => '10011',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'NL'
-//            ),
-//            'ideal' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
+    function test_p1_idealSale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'p1_idealSale',
+            'amount' => '10011',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'NL'
+            ),
+            'ideal' => array(),
+            'url' => PRELIVE_URL
+        );
+
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
 //        $this->assertEquals('000', XmlParser::getNode($saleResponse, 'response'));
 //        $this->assertEquals('Approved', XmlParser::getNode($saleResponse, 'message'));
 //        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
 //        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
     }
 
-//    function test_n10_idealSale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'p1_idealSale',
-//            'amount' => '10011',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'US'
-//            ),
-//            'ideal' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
-//        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
-//        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
-////        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
-////        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
-//    }
+    function test_n10_idealSale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'p1_idealSale',
+            'amount' => '10011',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'US'
+            ),
+            'ideal' => array(),
+            'url' => PRELIVE_URL
+        );
 
-//    function test_p1_giropaySale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'p1_giropaySale',
-//            'amount' => '10011',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'DE'
-//            ),
-//            'giropay' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
+        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
+        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
+//        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
+//        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
+    }
+
+    function test_p1_giropaySale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'p1_giropaySale',
+            'amount' => '10011',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'DE'
+            ),
+            'giropay' => array(),
+            'url' => PRELIVE_URL
+        );
+
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
 //        $this->assertEquals('000', XmlParser::getNode($saleResponse, 'response'));
 //        $this->assertEquals('Approved', XmlParser::getNode($saleResponse, 'message'));
 //        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
 //        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
-//    }
+    }
 
-//    function test_n10_giropaySale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'n10_giropaySale',
-//            'amount' => '20100',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'US'
-//            ),
-//            'giropay' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
-//        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
-//        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
-//    }
+    function test_n10_giropaySale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'n10_giropaySale',
+            'amount' => '20100',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'US'
+            ),
+            'giropay' => array(),
+            'url' => PRELIVE_URL
+        );
 
-//    function test_p1_sofortSale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'p1_sofortSale',
-//            'amount' => '10011',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'NL'
-//            ),
-//            'sofort' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
-////        $this->assertEquals('000', XmlParser::getNode($saleResponse, 'response'));
-////        $this->assertEquals('Approved', XmlParser::getNode($saleResponse, 'message'));
-////        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
-////        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
-//    }
-//
-//    function test_n10_sofortSale()
-//    {
-//        $sale_hash = array('id' => '1211',
-//            'orderId' => 'n10_sofortSale',
-//            'amount' => '20100',
-//            'orderSource' => 'ecommerce',
-//            'billToAddress' => array('name' => 'David Berman',
-//                'country' => 'US'
-//            ),
-//            'sofort' => array(),
-//            'url' => PRELIVE_URL
-//        );
-//
-//        $initialize = new CnpOnlineRequest();
-//        $saleResponse = $initialize->saleRequest($sale_hash);
-//        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
-//        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
-//    }
-//}
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
+        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
+        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
+    }
+
+    function test_p1_sofortSale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'p1_sofortSale',
+            'amount' => '10011',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'NL'
+            ),
+            'sofort' => array(),
+            'url' => PRELIVE_URL
+        );
+
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
+//        $this->assertEquals('000', XmlParser::getNode($saleResponse, 'response'));
+//        $this->assertEquals('Approved', XmlParser::getNode($saleResponse, 'message'));
+//        $this->assertEquals('Cert bank page ', XmlParser::getNode($saleResponse, 'redirectUrl'));
+//        $this->assertEquals('Dynamically Generated', XmlParser::getNode($saleResponse, 'redirectToken'));
+    }
+
+    function test_n10_sofortSale()
+    {
+        $sale_hash = array('id' => '1211',
+            'orderId' => 'n10_sofortSale',
+            'amount' => '20100',
+            'orderSource' => 'ecommerce',
+            'billToAddress' => array('name' => 'David Berman',
+                'country' => 'US'
+            ),
+            'sofort' => array(),
+            'url' => PRELIVE_URL
+        );
+
+        $initialize = new CnpOnlineRequest();
+        $saleResponse = $initialize->saleRequest($sale_hash);
+        $this->assertEquals('917', XmlParser::getNode($saleResponse, 'response'));
+        $this->assertEquals('Invalid billing country code', XmlParser::getNode($saleResponse, 'message'));
+    }
+}

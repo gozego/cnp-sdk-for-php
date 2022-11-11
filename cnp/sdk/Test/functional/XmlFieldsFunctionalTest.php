@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class XmlFieldsFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_card_no_type_or_track()
     {
         $hash_in = array('id' => '1211',
@@ -411,100 +405,5 @@ class XmlFieldsFunctionalTest extends \PHPUnit_Framework_TestCase
         $message = XmlParser::getAttribute($creditResponse, 'cnpOnlineResponse', 'message');
         $this->assertEquals("Valid Format", $message);
     }
-
-    public function test_simple_token_with_checkout_id()
-    {
-        $hash_in = array('merchantId' => '101', 'id' => '1211',
-            'version' => '8.8',
-            'reportGroup' => 'Planets',
-            'orderId' => '12344',
-            'amount' => '106',
-            'orderSource' => 'ecommerce',
-            'token' => array(
-                'cnpToken' => '123456789101112',
-                'expDate' => '1210',
-                'cardValidationNum' => '555',
-                'type' => 'VI',
-                'checkoutId' => '201234567891234567',
-            ));
-
-        $initialize = new CnpOnlineRequest();
-        $creditResponse = $initialize->creditRequest($hash_in);
-        $message = XmlParser::getAttribute($creditResponse, 'cnpOnlineResponse', 'message');
-
-
-        $this->assertEquals("Valid Format", $message);
-
-      //  $this->assertEquals("801", XmlParser::getAttribute($creditResponse, 'tokenResponse','tokenResponseCode'));
-
-    }
-
-    public function test_sale_customerInfo_with_accountUsername()
-    {
-        $hash_in = array('merchantId' => '101', 'id' => '1211',
-            'version' => '8.8',
-            'reportGroup' => 'Planets',
-            'cnpTxnId' => '123456',
-            'orderId' => '12344',
-            'amount' => '106',
-            'orderSource' => 'ecommerce',
-            'CustomerInfo' => array(
-                'ssn' => '12345',
-                'incomeAmount' => '12345',
-                'incomeCurrency' => 'dollar',
-                'yearsAtResidence' => '2',
-                'AccountUsername' => 'Woolfoo',
-                'UserAccountNumber' => '123456ATY',
-                'UserAccountEmail' => 'woolfoo@gmail.com',
-                'MembershipId' => 'Member01',
-                'MembershipPhone' => '9765431234',
-                'MembershipEmail' => 'mem@abc.com',
-                'MembershipName' => 'memName',
-		        'AccountCreatedDate' => '2022-04-04',
-		        'UserAccountPhone' => '123456789',
-            ),
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'
-            ));
-
-        $initialize = new CnpOnlineRequest();
-        $saleResponse = $initialize->saleRequest($hash_in);
-        $message = XmlParser::getAttribute($saleResponse, 'cnpOnlineResponse', 'message');
-        $this->assertEquals("Valid Format", $message);
-    }
-
-    public function test_enhancedData_with_discountCode()
-    {
-        $hash_in = array('merchantId' => '101', 'id' => '1211',
-            'version' => '8.8',
-            'reportGroup' => 'Planets',
-            'orderId' => '12344',
-            'amount' => '106',
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'),
-            'orderSource' => 'ecommerce',
-            'enhancedData' => array(
-                'detailtax' => array('taxAmount' => '1234', 'tax' => '50'),
-                'customerReference' => 'Litle',
-                'salesTax' => '50',
-                'deliveryType' => 'TBD',
-                'restriction' => 'DIG',
-                'shipFromPostalCode' => '01741',
-                'destinationPostalCode' => '01742',
-                'discountCode' => 'oneTimeDis',
-                'discountPercent' => '12',
-                'fulfilmentMethodType' => 'COUNTER_PICKUP'
-            )
-        );
-        $initialize = new CnpOnlineRequest();
-        $creditResponse = $initialize->creditRequest($hash_in);
-        $message = XmlParser::getAttribute($creditResponse, 'cnpOnlineResponse', 'message');
-        $this->assertEquals("Valid Format", $message);
-    }
-
 
 }

@@ -42,11 +42,7 @@ class Obj2xml
         $authentication = $xml->addChild('authentication');
         $authentication->addChild('user',$config["user"]);
         $authentication->addChild('password',$config["password"]);
-
-
-
         $transacType = $xml->addChild($type);
-
         if (isset($data['partial'])) {
             $transacType-> addAttribute('partial',$data["partial"]);
         };
@@ -59,23 +55,23 @@ class Obj2xml
             $transacType-> addAttribute('reportGroup',$config["reportGroup"]);
         };
         if (isset($data['id'])) {
-            if ($data['id'] === "REQUIRED") {
+        if ($data['id'] === "REQUIRED") {
                 throw new \InvalidArgumentException("Missing Required Field: id");
             }
             else {
-                $transacType-> addAttribute('id',$data["id"]);
+        	$transacType-> addAttribute('id',$data["id"]);
             }
         };
         unset($data['id']);
 
         Obj2xml::iterateChildren($data,$transacType);
-        
+
         return $xml->asXML();
     }
 
     public static function transactionShouldHaveReportGroup($transactionType)
     {
-        $transactionsThatDontHaveReportGroup = array(
+          $transactionsThatDontHaveReportGroup = array(
             'updateSubscription',
             'cancelSubscription',
             'createPlan',
@@ -91,16 +87,16 @@ class Obj2xml
         if (Obj2xml::transactionShouldHaveReportGroup($type)) {
             $transac->addAttribute('reportGroup', $report_group);
             if (isset($data['id'])) {
-                if ($data['id'] === "REQUIRED") {
-                    throw new \InvalidArgumentException("Missing Required Field: id");
-                }
-                else {
-                    $transac-> addAttribute('id',$data["id"]);
-                }
+            	if ($data['id'] === "REQUIRED") {
+            		throw new \InvalidArgumentException("Missing Required Field: id");
+            	}
+            	else {
+            		$transac-> addAttribute('id',$data["id"]);
+            	}
             };
             unset($data['id']);
         }
-
+       
         Obj2xml::iterateChildren($data,$transac);
 
         return str_replace("<?xml version=\"1.0\"?>\n", "", $transac->asXML());
@@ -138,19 +134,13 @@ class Obj2xml
 
         $xml->addAttribute('creditAmount', $counts_and_amounts['credit']['amount']);
         $xml->addAttribute('numCredits', $counts_and_amounts['credit']['count']);
-
+        
         $xml->addAttribute('giftCardCreditAmount', $counts_and_amounts['giftCardCredit']['amount']);
         $xml->addAttribute('numGiftCardCredits', $counts_and_amounts['giftCardCredit']['count']);
 
         $xml->addAttribute('numTokenRegistrations', $counts_and_amounts['tokenRegistration']['count']);
 
         $xml->addAttribute('numTranslateToLowValueTokenRequests', $counts_and_amounts['translateToLowValueTokenRequest']['count']);
-
-        $xml->addAttribute('depositTransactionReversalAmount', $counts_and_amounts['depositTransactionReversal']['amount']);
-        $xml->addAttribute('numDepositTransactionReversals', $counts_and_amounts['depositTransactionReversal']['count']);
-
-        $xml->addAttribute('refundTransactionReversalAmount', $counts_and_amounts['refundTransactionReversal']['amount']);
-        $xml->addAttribute('numRefundTransactionReversals', $counts_and_amounts['refundTransactionReversal']['count']);
 
         $xml->addAttribute('captureGivenAuthAmount', $counts_and_amounts['captureGivenAuth']['amount']);
         $xml->addAttribute('numCaptureGivenAuths', $counts_and_amounts['captureGivenAuth']['count']);
@@ -160,13 +150,13 @@ class Obj2xml
 
         $xml->addAttribute('authReversalAmount', $counts_and_amounts['authReversal']['amount']);
         $xml->addAttribute('numAuthReversals', $counts_and_amounts['authReversal']['count']);
-
+        
         $xml->addAttribute('giftCardAuthReversalOriginalAmount', $counts_and_amounts['giftCardAuthReversal']['amount']);
         $xml->addAttribute('numGiftCardAuthReversals', $counts_and_amounts['giftCardAuthReversal']['count']);
 
         $xml->addAttribute('captureAmount', $counts_and_amounts['capture']['amount']);
         $xml->addAttribute('numCaptures', $counts_and_amounts['capture']['count']);
-
+        
         $xml->addAttribute('giftCardCaptureAmount', $counts_and_amounts['giftCardCapture']['amount']);
         $xml->addAttribute('numGiftCardCaptures', $counts_and_amounts['giftCardCapture']['count']);
 
@@ -200,36 +190,28 @@ class Obj2xml
         $xml->addAttribute('numBalanceInquirys', $counts_and_amounts['balanceInquiry']['count']);
 
         $xml->addAttribute('numAccountUpdates', $counts_and_amounts['accountUpdate']['count']);
-
+        
         $xml->addAttribute('numEcheckPreNoteSale', $counts_and_amounts['echeckPreNoteSale']['count']);
         $xml->addAttribute('numEcheckPreNoteCredit', $counts_and_amounts['echeckPreNoteCredit']['count']);
-
+        
         $xml->addAttribute('submerchantCreditAmount', $counts_and_amounts['submerchantCredit']['amount']);
         $xml->addAttribute('numSubmerchantCredit', $counts_and_amounts['submerchantCredit']['count']);
         $xml->addAttribute('payFacCreditAmount', $counts_and_amounts['payFacCredit']['amount']);
         $xml->addAttribute('numPayFacCredit', $counts_and_amounts['payFacCredit']['count']);
-        $xml->addAttribute('payoutOrgCreditAmount', $counts_and_amounts['payoutOrgCredit']['amount']);
-        $xml->addAttribute('numPayoutOrgCredit', $counts_and_amounts['payoutOrgCredit']['count']);
         $xml->addAttribute('reserveCreditAmount', $counts_and_amounts['reserveCredit']['amount']);
         $xml->addAttribute('numReserveCredit', $counts_and_amounts['reserveCredit']['count']);
         $xml->addAttribute('vendorCreditAmount', $counts_and_amounts['vendorCredit']['amount']);
         $xml->addAttribute('numVendorCredit', $counts_and_amounts['vendorCredit']['count']);
-        $xml->addAttribute('customerCreditAmount', $counts_and_amounts['customerCredit']['amount']);
-        $xml->addAttribute('numCustomerCredit', $counts_and_amounts['customerCredit']['count']);
         $xml->addAttribute('physicalCheckCreditAmount', $counts_and_amounts['physicalCheckCredit']['amount']);
         $xml->addAttribute('numPhysicalCheckCredit', $counts_and_amounts['physicalCheckCredit']['count']);
         $xml->addAttribute('submerchantDebitAmount', $counts_and_amounts['submerchantDebit']['amount']);
         $xml->addAttribute('numSubmerchantDebit', $counts_and_amounts['submerchantDebit']['count']);
         $xml->addAttribute('payFacDebitAmount', $counts_and_amounts['payFacDebit']['amount']);
         $xml->addAttribute('numPayFacDebit', $counts_and_amounts['payFacDebit']['count']);
-        $xml->addAttribute('payoutOrgDebitAmount', $counts_and_amounts['payoutOrgDebit']['amount']);
-        $xml->addAttribute('numPayoutOrgDebit', $counts_and_amounts['payoutOrgDebit']['count']);
         $xml->addAttribute('reserveDebitAmount', $counts_and_amounts['reserveDebit']['amount']);
         $xml->addAttribute('numReserveDebit', $counts_and_amounts['reserveDebit']['count']);
         $xml->addAttribute('vendorDebitAmount', $counts_and_amounts['vendorDebit']['amount']);
         $xml->addAttribute('numVendorDebit', $counts_and_amounts['vendorDebit']['count']);
-        $xml->addAttribute('customerDebitAmount', $counts_and_amounts['customerDebit']['amount']);
-        $xml->addAttribute('numCustomerDebit', $counts_and_amounts['customerDebit']['count']);
         $xml->addAttribute('physicalCheckDebitAmount', $counts_and_amounts['physicalCheckDebit']['amount']);
         $xml->addAttribute('numPhysicalCheckDebit', $counts_and_amounts['physicalCheckDebit']['count']);
         $xml->addAttribute('numFundingInstructionVoid', $counts_and_amounts['fundingInstructionVoid']['count']);
@@ -260,46 +242,38 @@ class Obj2xml
             //print $key . " " . $value . "\n";
             if ($value === "REQUIRED") {
                 throw new \InvalidArgumentException("Missing Required Field: /$key/");
-            } elseif (mb_substr($key, 0, 12) === 'lineItemData') {
+            } elseif (substr($key, 0, 12) === 'lineItemData') {
                 $temp_node = $transacType->addChild('lineItemData');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,-1) == 'detailTax') {
+            } elseif (substr($key,0,-1) == 'detailTax') {
                 $temp_node = $transacType->addChild('detailTax');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,14) == 'createDiscount' and $value != null) {
+            } elseif (substr($key,0,14) == 'createDiscount' and $value != null) {
                 $temp_node = $transacType->addChild('createDiscount');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,14) == 'updateDiscount') {
+            } elseif (substr($key,0,14) == 'updateDiscount') {
                 $temp_node = $transacType->addChild('updateDiscount');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,14) == 'deleteDiscount') {
+            } elseif (substr($key,0,14) == 'deleteDiscount') {
                 $temp_node = $transacType->addChild('deleteDiscount');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,11) == 'createAddOn' and $value != null) {
+            } elseif (substr($key,0,11) == 'createAddOn' and $value != null) {
                 $temp_node = $transacType->addChild('createAddOn');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,11) == 'updateAddOn') {
+            } elseif (substr($key,0,11) == 'updateAddOn') {
                 $temp_node = $transacType->addChild('updateAddOn');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,11) == 'deleteAddOn') {
+            } elseif (substr($key,0,11) == 'deleteAddOn') {
                 $temp_node = $transacType->addChild('deleteAddOn');
                 Obj2xml::iterateChildren($value,$temp_node);
-            } elseif (mb_substr($key,0,-1) == 'lodgingCharge') {
+            } elseif (substr($key,0,-1) == 'lodgingCharge') {
                 $temp_node = $transacType->addChild('lodgingCharge');
                 Obj2xml::iterateChildren($value,$temp_node);
-            }  elseif (mb_substr($key,0,-1) == 'tripLegData') {
-                $temp_node = $transacType->addChild('tripLegData');
-                Obj2xml::iterateChildren($value, $temp_node);
-            } elseif (mb_substr($key,0,16) == 'debitNetworkName') {
+            } elseif (substr($key,0,16) == 'debitNetworkName') {
                 //$temp_node = $transacType->addChild('debitNetworkName');
                 $transacType->addChild('debitNetworkName',str_replace('&','&amp;',$value));
             } elseif (((is_string($value)) || is_numeric($value))) {
                 $transacType->addChild($key,str_replace('&','&amp;',$value));
-            } elseif (mb_substr($key,0,22) == 'ctxPaymentInformation') {
-                $temp_node = $transacType->addChild('ctxPaymentInformation');
-                foreach ($value as $v){
-                    $temp_node->addChild('ctxPaymentDetail',$v);
-                }
             } elseif (is_array($value)) {
                 $node = $transacType->addChild($key);
                 Obj2xml::iterateChildren($value,$node);
@@ -311,7 +285,7 @@ class Obj2xml
     {
         $config_array = null;
 
-        $ini_file = realpath(dirname(__FILE__)) . '/cnp_SDK_config.ini';
+    $ini_file = realpath(dirname(__FILE__)) . '/cnp_SDK_config.ini';
         if (file_exists($ini_file)) {
             @$config_array =parse_ini_file('cnp_SDK_config.ini');
         }
@@ -331,9 +305,7 @@ class Obj2xml
                 } elseif ($name == 'version') {
                     $config['version'] = isset($config_array['version'])? $config_array['version']:CURRENT_XML_VERSION;
                 } elseif ($name == 'timeout') {
-                    $config['timeout'] = isset($config_array['timeout'])? $config_array['timeout']:'65';
-                } elseif ($name == 'sftp_timeout') {
-                    $config['sftp_timeout'] = isset($config_array['sftp_timeout'])? $config_array['sftp_timeout']:'720';
+                        $config['timeout'] = isset($config_array['timeout'])? $config_array['timeout']:'65';
                 } else {
                     if ((!isset($config_array[$name])) and ($name != 'proxy')) {
                         throw new \InvalidArgumentException("Missing Field /$name/");

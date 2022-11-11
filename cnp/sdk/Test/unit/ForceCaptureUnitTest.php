@@ -24,15 +24,8 @@
  */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class ForceCaptureUnitTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_forcCapture()
     {
         $hash_in = array(
@@ -50,29 +43,6 @@ class ForceCaptureUnitTest extends \PHPUnit_Framework_TestCase
         $mock->expects($this->once())
         ->method('request')
         ->with($this->matchesRegularExpression('/.*<token><cnpToken>123456789101112.*<expDate>1210.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->forceCaptureRequest($hash_in);
-    }
-    public function test_simple_forcCapture_with_merchantCategoryCode()
-    {
-        $hash_in = array(
-            'orderId'=>'123',
-            'id' => 'id',
-            'cnpTxnId'=>'123456',
-            'amount'=>'106',
-            'orderSource'=>'ecommerce',
-            'merchantCategoryCode' => '3535',
-            'token'=> array(
-                'cnpToken'=>'123456789101112',
-                'expDate'=>'1210',
-                'cardValidationNum'=>'555',
-                'type'=>'VI'));
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<token><cnpToken>123456789101112.*<expDate>1210.*/'));
 
         $cnpTest = new CnpOnlineRequest();
         $cnpTest->newXML = $mock;
@@ -361,54 +331,6 @@ class ForceCaptureUnitTest extends \PHPUnit_Framework_TestCase
     	$cnpTest = new CnpOnlineRequest();
     	$cnpTest->newXML = $mock;
     	$cnpTest->forceCaptureRequest($hash_in);
-    }
-
-    public function test_forceCapture_with_passengerTransportData()
-    {
-        $hash_in = array('id' => 'id',
-            'orderId' => '12344',
-            'amount' => '106',
-            'orderSource' => 'ecommerce',
-            'card' => array(
-                'type' => 'VI',
-                'number' => '4100000000000000',
-                'expDate' => '1210'
-            ),
-            'passengerTransportData' =>array(
-                'passengerName' =>'Mrs. Huxley234567890123456789',
-                'ticketNumber' =>'ATL456789012345' ,
-                'issuingCarrier' =>'AMTK',
-                'carrierName' =>'AMTK',
-                'restrictedTicketIndicator' =>'99999',
-                'numberOfAdults' =>'2',
-                'numberOfChildren' =>'0',
-                'customerCode' =>'Railway',
-                'arrivalDate' =>'2022-09-20',
-                'issueDate' =>'2022-09-10',
-                'travelAgencyCode' =>'12345678',
-                'travelAgencyName' =>'Travel R Us23456789012345',
-                'computerizedReservationSystem' =>'STRT',
-                'creditReasonIndicator' =>'P',
-                'ticketChangeIndicator' =>'C',
-                'ticketIssuerAddress' =>'99 Second St',
-                'exchangeTicketNumber' =>'123456789012346',
-                'exchangeAmount' =>'500046',
-                'exchangeFeeAmount' =>'5046',
-                'tripLegData' =>array(
-                    'tripLegNumber' =>'10',
-                    'serviceClass' =>'First',
-                    'departureDate' =>'2022-09-20',
-                    'originCity' =>'BOS'))
-        );
-
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock	->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<passengerName>Mrs. Huxley234567890123456789.*<ticketNumber>ATL456789012345.*<exchangeAmount>500046.*<serviceClass>First.*<originCity>BOS.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->forceCaptureRequest($hash_in);
     }
     
 }

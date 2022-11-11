@@ -4,7 +4,7 @@ namespace cnp\sdk;
 
 class CnpResponseProcessor {
 	private $xml_reader;
-    public static $deleteBatchFiles = FALSE;
+    public static $deleteBatchFiles = "false";
 	
 	/*
 	 * $response_file is a string corresponding to the path of the response file to be processed.
@@ -69,17 +69,13 @@ class CnpResponseProcessor {
 				"echeckPreNoteCreditResponse",
 				"submerchantCreditResponse",
 				"payFacCreditResponse",
-                "payoutOrgCreditResponse",
 				"reserveCreditResponse",
 				"vendorCreditResponse",
-                "customerCreditResponse",
 				"physicalCheckCreditResponse",
 				"submerchantDebitResponse",
 				"payFacDebitResponse",
-                "payoutOrgDebitResponse",
 				"reserveDebitResponse",
 				"vendorDebitResponse",
-                "customerDebitResponse",
 				"physicalCheckDebitResponse",
 				"fraudCheckResponse",
 				"giftCardAuthReversalResponse",

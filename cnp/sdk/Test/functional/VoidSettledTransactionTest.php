@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class VoidSettledTransactionTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_VoidSettledTransaction()
     {
         $auth_hash = array('id' => '1211',
@@ -65,7 +59,6 @@ class VoidSettledTransactionTest extends \PHPUnit_Framework_TestCase
 
         $void_hash2 = array('cnpTxnId' => (XmlParser::getNode($creditResponse, 'cnpTxnId')), 'id' => '1211',);
         $voidResponse2 = $initialize->voidRequest($void_hash2);
-        //This test does the same thing as above, but uses a randomly generated value with chance of producing a special value that fails the test
-        //$this->assertEquals('000', XmlParser::getNode($voidResponse2, 'response'));
+        $this->assertEquals('000', XmlParser::getNode($voidResponse2, 'response'));
     }
 }

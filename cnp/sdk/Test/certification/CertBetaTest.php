@@ -25,18 +25,12 @@
 namespace cnp\sdk\Test\certification;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 USE cnp\sdk\XmlParser;
 
 define('PRELIVE_URL', 'https://payments.vantivprelive.com/vap/communicator/online');
 
 class CertBetaTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     function test_6_auth()
     {
         $hash = array('id' => '1211',
@@ -57,7 +51,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '992',
                 'type' => 'VI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -88,7 +82,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '992',
                 'type' => 'VI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -102,7 +96,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
         $hash = array('id' => '1211',
             'cnpTxnId' => (XmlParser::getNode($response, 'cnpTxnId')),
             'reportGroup' => 'planets',
-            'url' => PRELIVE_URL, 'proxy'=>'');
+            'url' => PRELIVE_URL);
         $initialize = new CnpOnlineRequest();
         $response = $initialize->voidRequest($hash);
         $this->assertEquals('000', XmlParser::getNode($response, 'response'));
@@ -129,7 +123,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '251',
                 'type' => 'MC'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -160,7 +154,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '251',
                 'type' => 'MC'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -191,7 +185,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '251',
                 'type' => 'MC'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -222,7 +216,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '184',
                 'type' => 'DI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -254,7 +248,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '184',
                 'type' => 'DI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -285,7 +279,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '184',
                 'type' => 'DI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -316,7 +310,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '0421',
                 'type' => 'AX'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -347,7 +341,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '0421',
                 'type' => 'AX'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -378,7 +372,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'cardValidationNum' => '0421',
                 'type' => 'AX'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -402,7 +396,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'expDate' => '0921',
                 'type' => 'VI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -425,7 +419,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'expDate' => '1121',
                 'type' => 'MC'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -448,7 +442,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'expDate' => '0421',
                 'type' => 'AX'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();
@@ -471,7 +465,7 @@ class CertBetaTest extends \PHPUnit_Framework_TestCase
                 'expDate' => '0821',
                 'type' => 'DI'
             ),
-            'url' => PRELIVE_URL, 'proxy'=>''
+            'url' => PRELIVE_URL
         );
 
         $initialize = new CnpOnlineRequest();

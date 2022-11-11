@@ -24,15 +24,8 @@
  */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class EcheckRedepositUnitTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_echeckRedeposit()
     {
         $hash_in = array('cnpTxnId' =>'123123','id' => 'id');
@@ -63,12 +56,12 @@ class EcheckRedepositUnitTest extends \PHPUnit_Framework_TestCase
         $retOb = $cnpTest->echeckRedepositRequest($hash_in);
     }
 
-    // As of 12.15, routingNum isn't required as part of the request (won't throw an exception)
     public function test_no_routingNum_echeckToken()
     {
         $hash_in = array('reportGroup'=>'Planets','cnpTxnId'=>'123456','id' => 'id',
         'echeckToken' => array('accType'=>'Checking','cnpToken'=>'1234565789012','checkNum'=>'123455'));
         $cnpTest = new CnpOnlineRequest();
+        $this->setExpectedException('PHPUnit_Framework_Error_Warning');
         $retOb = $cnpTest->echeckRedepositRequest($hash_in);
     }
 

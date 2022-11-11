@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class GiftCardCaptureFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_giftCardCapture()
     {
         $hash_in = array(
@@ -58,8 +52,6 @@ class GiftCardCaptureFunctionalTest extends \PHPUnit_Framework_TestCase
         $response = XmlParser::getNode($giftCardCaptureResponse, 'response');
 
         $this->assertEquals('000', $response);
-        $location = XmlParser::getNode($giftCardCaptureResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_giftCardCapture_giftCardResponse()
@@ -89,8 +81,6 @@ class GiftCardCaptureFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0', $systemTraceId);
         $sequenceNumber = XmlParser::getNode($giftCardCaptureResponse, 'sequenceNumber');
         $this->assertEquals('123456', $sequenceNumber);
-        $location = XmlParser::getNode($giftCardCaptureResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
 

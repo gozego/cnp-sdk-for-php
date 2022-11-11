@@ -25,16 +25,10 @@
 namespace cnp\sdk\Test\functional;
 
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlParser;
 
 class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_token()
     {
         $hash_in = array('id' => '1211',
@@ -48,8 +42,6 @@ class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
         $registerTokenResponse = $initialize->registerTokenRequest($hash_in);
         $message = XmlParser::getAttribute($registerTokenResponse, 'cnpOnlineResponse', 'message');
         $this->assertEquals('Valid Format', $message);
-        $location = XmlParser::getNode($registerTokenResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_token_with_paypage()
@@ -65,8 +57,6 @@ class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
         $registerTokenResponse = $initialize->registerTokenRequest($hash_in);
         $message = XmlParser::getAttribute($registerTokenResponse, 'cnpOnlineResponse', 'message');
         $this->assertEquals('Valid Format', $message);
-        $location = XmlParser::getNode($registerTokenResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_token_with_echeck()
@@ -82,8 +72,6 @@ class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
         $registerTokenResponse = $initialize->registerTokenRequest($hash_in);
         $message = XmlParser::getAttribute($registerTokenResponse, 'cnpOnlineResponse', 'message');
         $this->assertEquals('Valid Format', $message);
-        $location = XmlParser::getNode($registerTokenResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_token_echeck_missing_required()
@@ -119,8 +107,6 @@ class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
         $registerTokenResponse = $initialize->registerTokenRequest($hash_in);
         $message = XmlParser::getAttribute($registerTokenResponse, 'cnpOnlineResponse', 'message');
         $this->assertEquals('Valid Format', $message);
-        $location = XmlParser::getNode($registerTokenResponse, 'location');
-        $this->assertEquals('sandbox', $location);
     }
 
     public function test_simple_token_with_androidpay()
@@ -137,12 +123,9 @@ class TokenFunctionalTest extends \PHPUnit_Framework_TestCase
         $cryptogram = XmlParser::getNode($registerTokenResponse, 'cryptogram');
         $expMonth = XmlParser::getNode($registerTokenResponse, 'expMonth');
         $expYear = XmlParser::getNode($registerTokenResponse, 'expYear');
-        $location = XmlParser::getNode($registerTokenResponse, 'location');
         $this->assertEquals('Valid Format', $message);
         $this->assertEquals('aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1kUXc0dzlXZ1hjUQ0K', $cryptogram);
         $this->assertEquals('01', $expMonth);
         $this->assertEquals('2050', $expYear);
-        $this->assertEquals('sandbox', $location);
     }
-
 }

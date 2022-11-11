@@ -23,26 +23,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 namespace cnp\sdk;
-use cnp\sdk\exceptions\cnpSDKException;
 use DOMDocument;
 
 class Checker
 {
-    /**
-     * @param $request
-     * @return bool
-     * @throws cnpSDKException
-     */
     public static function validateXML($request){
         $xml = new DOMDocument();
         $xml->loadXML($request);
-        $filepath = __DIR__ . "/schema/SchemaCombined_v12.27.xsd";
-        $result =  $xml->schemaValidate( $filepath);
-
-        if(!$result)
-            throw new cnpSDKException("Fatal ERROR: Invalid XML Request!");
-
-
-        return $result;
+        $filepath =  __DIR__."/schema/SchemaCombined_v12.5.xsd";
+        return $xml->schemaValidate( $filepath);
     }
 }

@@ -24,15 +24,8 @@
 */
 namespace cnp\sdk\Test\unit;
 use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
-
 class QueryTransaction extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function testQueryTransactionSimple()
     {
         $hash_in = array(
@@ -43,22 +36,6 @@ class QueryTransaction extends \PHPUnit_Framework_TestCase
         $mock	->expects($this->once())
         ->method('request')
         ->with($this->matchesRegularExpression('/.*<origId>2111.*<origActionType>A.*/'));
-
-        $cnpTest = new CnpOnlineRequest();
-        $cnpTest->newXML = $mock;
-        $cnpTest->queryTransaction($hash_in);
-    }
-
-    public function testQueryTransactionWithNewActionTypeValue()
-    {
-        $hash_in = array(
-            'id' => 'id',
-            'origId'=> '2111',
-            'origActionType'=>'FIPC');
-        $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-        $mock	->expects($this->once())
-            ->method('request')
-            ->with($this->matchesRegularExpression('/.*<origId>2111.*<origActionType>FIPC.*/'));
 
         $cnpTest = new CnpOnlineRequest();
         $cnpTest->newXML = $mock;

@@ -24,18 +24,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 namespace cnp\sdk\Test\unit;
-use cnp\sdk\CnpOnlineRequest;
-use cnp\sdk\CommManager;
 use cnp\sdk\XmlFields;
-use cnp\sdk\XmlParser;
-
 class XmlFieldsTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-
     public function test_simple_contact()
     {
         $hash = array(
@@ -86,12 +77,10 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
     public function test_simple_fraudCheckType()
     {
         $hash=array(
-        "tokenAuthenticationValue"=>"456",
         "authenticationValue"=>"123",
         "authenticationTransactionId"=>"123",
         "authenticatedByMerchant"=> "YES");
         $hash_out = XmlFields::fraudCheckType($hash);
-        $this->assertEquals($hash_out["tokenAuthenticationValue"],"456");
         $this->assertEquals($hash_out["authenticationValue"],"123");
         $this->assertEquals($hash_out["customerIpAddress"], NULL);
         $this->assertEquals($hash_out["authenticationTransactionId"],"123");
@@ -128,13 +117,11 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
         $hash=array(
         "totalHealthcareAmount"=>"123",
         "RxAmount"=>"456",
-        "visionAmount"=>"789",
-        "copayAmount"=>"345");
+        "visionAmount"=>"789");
         $hash_out = XmlFields::healthcareAmounts($hash);
         $this->assertEquals($hash_out["totalHealthcareAmount"],"123");
         $this->assertEquals($hash_out["dentalAmount"], NULL);
         $this->assertEquals($hash_out["RxAmount"],"456");
-        $this->assertEquals($hash_out["copayAmount"],"345");
     }
 
     public function test_simple_healtcareIIAS()
@@ -249,36 +236,6 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
 
     }
 
-
-    public function test_simple_cardTokenTypewithCheckoutID()
-    {
-        $hash = array(
-            "expDate"=>"2013",
-            "cardValidationNum"=>"123",
-            "type"=>"VISA",
-            "checkoutId" => '234565345435');
-        $hash_out = XmlFields::cardTokenType($hash);
-        $this->assertEquals($hash_out["type"], "VISA");
-        $this->assertEquals($hash_out["expDate"], "2013");
-        $this->assertEquals($hash_out["cardValidationNum"], "123");
-        $this->assertEquals($hash_out["checkoutId"], "234565345435");
-    }
-
-    public function test_simple_cardTokenTypewithAuthenticatedShopperID()
-    {
-        $hash = array(
-            "expDate"=>"2013",
-            "cardValidationNum"=>"123",
-            "type"=>"VISA",
-            "authenticatedShopperID" => '234565345435');
-        $hash_out = XmlFields::cardTokenType($hash);
-        $this->assertEquals($hash_out["type"], "VISA");
-        $this->assertEquals($hash_out["expDate"], "2013");
-        $this->assertEquals($hash_out["cardValidationNum"], "123");
-        $this->assertEquals($hash_out["authenticatedShopperID"], "234565345435");
-    }
-
-
     public function test_simple_cardPaypageType()
     {
         $hash = array(
@@ -376,11 +333,10 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
     {
         $hash = array(
         "cnpToken" =>"1243141413421343",
-        "accType"=>"checking",
-        "routingNum"=>"12345678");
+        "accType"=>"checking");
         $hash_out = XmlFields::echeckTokenType($hash);
         $this->assertEquals($hash_out["accType"], "checking");
-        $this->assertEquals($hash_out["routingNum"], "12345678");
+        $this->assertEquals($hash_out["routingNum"], "");
         $this->assertEquals($hash_out["checkNum"], NUll);
     }
 
@@ -389,16 +345,13 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
         $hash = array();
         $hash_out = XmlFields::recyclingRequestType($hash);
         $this->assertEquals($hash_out["recycleBy"], "");
-        $this->assertEquals($hash_out["recycleId"], "");
     }
     public function test_recyclingRequestType()
     {
         $hash = array(
-        "recycleBy" => "recylingbin",
-        "recycleId" => "recycleId");
+        "recycleBy" => "recylingbin");
         $hash_out = XmlFields::recyclingRequestType($hash);
         $this->assertEquals($hash_out["recycleBy"], "recylingbin");
-        $this->assertEquals($hash_out["recycleId"], "recycleId");
     }
 
     public function test_contact_name_to_long()
@@ -586,77 +539,6 @@ class XmlFieldsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($hash_out["encryptedTrack"],"Encrypted Track");
         $this->assertEquals($hash_out["track1Status"],"2");
         $this->assertEquals($hash_out["track2Status"],"1");
-
-    }
-
-    public function test_simple_checkoutid()
-    {
-        $hash = array(
-            "expDate"=>"2013",
-            "cardValidationNum"=>"123",
-            "type"=>"VISA",
-            "checkoutId" => "324324324234"
-        );
-        $hash_out = XmlFields::cardTokenType($hash);
-        $this->assertEquals($hash_out["type"], "VISA");
-        $this->assertEquals($hash_out["expDate"], "2013");
-        $this->assertEquals($hash_out["cardValidationNum"], "123");
-        $this->assertEquals($hash_out["checkoutId"], "324324324234");
-        $this->assertEquals($hash_out["cnpToken"], "");
-
-    }
-    public function test_customerInfo_with_accountUsername()
-    {
-        $hash_in  = array(
-                'ssn' => '12345',
-                'incomeAmount' => '12345',
-                'incomeCurrency' => 'dollar',
-                'yearsAtResidence' => '2',
-                'accountUsername' => 'Woolfoo',
-                'userAccountNumber' => '123456ATY',
-                'userAccountEmail' => 'woolfoo@gmail.com',
-                'membershipId' => 'Member01',
-                'membershipPhone' => '9765431234',
-                'membershipEmail' => 'mem@abc.com',
-                'membershipName' => 'memName',
-                'accountCreatedDate' => '2022-04-04',
-                'userAccountPhone' => '123456789',
-
-           );
-        $hash_out = XmlFields::customerInfo($hash_in);
-        $this->assertEquals($hash_out ["accountUsername"], "Woolfoo");
-        $this->assertEquals($hash_out ["userAccountNumber"], "123456ATY");
-        $this->assertEquals($hash_out ["userAccountEmail"], "woolfoo@gmail.com");
-        $this->assertEquals($hash_out ["membershipId"], "Member01");
-        $this->assertEquals($hash_out ["membershipPhone"], "9765431234");
-        $this->assertEquals($hash_out ["membershipEmail"], "mem@abc.com");
-        $this->assertEquals($hash_out ["membershipName"], "memName");
-        $this->assertEquals($hash_out ["accountCreatedDate"], "2022-04-04");
-        $this->assertEquals($hash_out ["userAccountPhone"], "123456789");
-
-
-    }
-
-    public function test_enhancedData_with_discountCode()
-    {
-        $hash_in =  array(
-                'detailtax' => array('taxAmount' => '1234', 'tax' => '50'),
-                'customerReference' => 'Litle',
-                'salesTax' => '50',
-                'deliveryType' => 'TBD',
-                'restriction' => 'DIG',
-                'shipFromPostalCode' => '01741',
-                'destinationPostalCode' => '01742',
-                'discountCode' => 'oneTimeDis',
-                'discountPercent' => '12',
-                'fulfilmentMethodType' => 'COUNTER_PICKUP'
-
-        );
-        $hash_out = XmlFields::enhancedData($hash_in);
-        $this->assertEquals($hash_out ["discountCode"], "oneTimeDis");
-        $this->assertEquals($hash_out ["discountPercent"], "12");
-        $this->assertEquals($hash_out ["fulfilmentMethodType"], "COUNTER_PICKUP");
-
 
     }
 

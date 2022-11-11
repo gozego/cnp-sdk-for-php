@@ -25,12 +25,7 @@
 namespace cnp\sdk;
  class AuthReversalUnitTest extends \PHPUnit_Framework_TestCase
 {
-     public static function setUpBeforeClass()
-     {
-         CommManager::reset();
-     }
-
-     public function test_capture()
+    public function test_capture()
     {
         $hash_in = array('cnpTxnId'=> '1234567890','reportGroup'=>'Planets', 'amount'=>'5000','id' => 'id',);
         $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
@@ -109,32 +104,5 @@ namespace cnp\sdk;
         $cnpTest->newXML = $mock;
         $cnpTest->authReversalRequest($hash_in);
     }
-
-     public function test_authRev_with_additionalCOFData()
-     {
-         $hash_in = array('id' => 'id',
-             'amount' => '123',
-             'payPalNotes' => 'Notes',
-             'cnpTxnId' => '12345678000',
-             'additionalCOFData' => array(
-                 'totalPaymentCount' => 'ND',
-                 'paymentType' => 'Fixed Amount',
-                 'uniqueId' => '234GTYH654RF13',
-                 'frequencyOfMIT' => 'Annually',
-                 'validationReference' => 'ANBH789UHY564RFC@EDB',
-                 'sequenceIndicator' => '86',
-             ),
-         );
-
-         $mock = $this->getMock('cnp\sdk\CnpXmlMapper');
-         $mock
-             ->expects($this->once())
-             ->method('request')
-             ->with($this->matchesRegularExpression('/.*<amount>123.*<sequenceIndicator>86.*/'));
-
-         $cnpTest = new CnpOnlineRequest();
-         $cnpTest->newXML = $mock;
-         $cnpTest->authReversalRequest($hash_in);;
-     }
 
 }

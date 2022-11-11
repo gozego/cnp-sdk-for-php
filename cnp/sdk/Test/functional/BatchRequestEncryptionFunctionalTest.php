@@ -2,7 +2,6 @@
 
 namespace cnp\sdk\Test\functional;
 
-use cnp\sdk\CommManager;
 use cnp\sdk\Obj2xml;
 use cnp\sdk\BatchRequest;
 use cnp\sdk\CnpRequest;
@@ -17,24 +16,10 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
     private $sftpPassword;
     private $merchantId;
     private $config;
-    private $preliveStatus;
-
-
-
-    public static function setUpBeforeClass()
-    {
-        CommManager::reset();
-    }
-    public function test_asdf(){
-        echo 'Starting BatchRequestEncryptionFunctional';
-        $this->assertEquals(0, 0);
-    }
-
 
     public function setUp()
     {
-        echo 'Starting setup';
-        $this->direct = sys_get_temp_dir() . '/test' . CURRENT_SDK_VERSION;
+        $this->direct = sys_get_temp_dir() . '/test';
         if (!file_exists($this->direct)) {
             mkdir($this->direct);
         }
@@ -55,25 +40,17 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
         $this->sftpUsername = $this->config['sftp_username'];
         $this->sftpPassword = $this->config['sftp_password'];
         $this->merchantId = $this->config['merchantId'];
-        $this->preliveStatus = $_SERVER['preliveStatus'];
-        echo 'Finishing setup';
-
     }
 
     public function test_configuredCnpBatchRequestsManually()
     {
-        echo "Starting test_configuredCnpBatchRequestsManually";
-        //creating local variables to avoid conflicts with other tests
+        //creating local variables to avoid conflicts with other tests 
           $username_local = $_SERVER['encUsername'];
           $password_local = $_SERVER['encPassword'];
           $sftpUsername_local = $_SERVER['encSftpUsername'];
           $sftpPassword_local = $_SERVER['encSftpPassword'];
           $merchantId_local = $_SERVER['encMerchantId'];
-
-          if(strtolower($this->preliveStatus) == 'down'){
-              $this->markTestSkipped('Prelive is not available');
-          }
-
+        
         $sale_info = array(
             'id' => '1',
             'orderId' => '1',
@@ -101,7 +78,7 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
             'sftp_username' => $sftpUsername_local,
             'sftp_password' => $sftpPassword_local,
             'useEncryption' => 'true',
-            'batch_url' => 'payments.vantivprelive.com'
+            'batch_url' => 'prelive.litle.com',
         );
 
         $cnp_request = new CnpRequest($config_hash);
@@ -124,7 +101,6 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
         $response = $resp->getXmlReader()->getAttribute("response");
         $this->assertEquals("Valid Format", $message);
         $this->assertEquals(0, $response);
-        echo "Finishing test_configuredCnpBatchRequestsManually";
     }
 
     public function test_mechaBatch()
@@ -136,9 +112,6 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
         $sftpPassword_local = $_SERVER['encSftpPassword'];
         $merchantId_local = $_SERVER['encMerchantId'];
 
-        if(strtolower($this->preliveStatus) == 'down'){
-            $this->markTestSkipped('Prelive is not available');
-        }
 
         $config_hash = array(
             'user' => $username_local,
@@ -147,7 +120,7 @@ class BatchRequestEncryptionFunctionalTest extends \PHPUnit_Framework_TestCase
             'sftp_username' => $sftpUsername_local,
             'sftp_password' => $sftpPassword_local,
             'useEncryption' => 'true',
-            'batch_url' => 'payments.vantivprelive.com',
+            'batch_url' => 'prelive.litle.com',
         );
         $request = new CnpRequest($config_hash);
 
