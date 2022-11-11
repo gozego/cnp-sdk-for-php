@@ -5,6 +5,7 @@
 /.buildpath
 reports/
 /vendor
+composer.lock
 /lib
 /cnp_SDK_config.ini
 composer.phar
